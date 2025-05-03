@@ -1,0 +1,1202 @@
+[
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year 2024, including only those with paid_at dates from 2024-01-01 to 2024-12-31. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not explicitly exclude dates outside the specified range, making it less precise and potentially different in result."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting all records from the subscriptions table where the status is 'active'."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The second query filters the payments to only those with status 'completed', so it may return a different sum than the first, which sums all payments regardless of status."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT users.name\nFROM users\nJOIN payments ON users.id = payments.user_id",
+    "gpt_eval": "DIFFERENT. The generated SQL uses table aliases (\"users\" and \"payments\") without the \"u\" and \"p\" aliases, which makes it less detailed but still functionally equivalent; however, since the expected SQL explicitly uses aliases, the generated version is less precise and thus considered different."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year component of paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and logic, returning user_ids from the projects table where the count of projects per user exceeds one. The generated SQL is more detailed but functionally equivalent to the expected SQL."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT users.name\nFROM users\nJOIN payments ON users.id = payments.user_id",
+    "gpt_eval": "DIFFERENT. The second query is missing the alias \"p\" for the payments table, which makes it syntactically incorrect or less precise, so it does not match the intended semantics of the first query."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, filtering the subscriptions table for rows where status equals 'active'."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT users.name FROM users JOIN payments ON users.id = payments.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are semantically equivalent; they select distinct user names from the users table joined with payments on matching user IDs, and the second query is just more explicit in referencing the table aliases."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, making it less accurate and potentially different in result."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT users.name\nFROM users\nJOIN payments ON users.id = payments.user_id",
+    "gpt_eval": "DIFFERENT. The second query is missing the alias \"p\" for the payments table, which makes it syntactically incorrect or less precise, so it does not match the intended semantics of the first query."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The second query filters the payments to only those with status 'completed', so it may return a different sum than the first, which sums all payments regardless of status."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH. The generated SQL is more detailed by aliasing the columns as project_name and owner_name, but it retrieves the same data as the expected SQL, which selects p.name and u.name from the join."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, making it less accurate and potentially different in result."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data (project and user names) with just different column aliases, which do not affect the result set."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions, with the only difference being the alias \"subscription_count\" in the generated SQL, which does not affect the result set."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT users.name\nFROM users\nJOIN payments ON users.id = payments.user_id",
+    "gpt_eval": "DIFFERENT. The generated SQL uses table aliases (\"users\" and \"payments\") without the \"u\" and \"p\" aliases used in the expected SQL, so it is less detailed but still correct; however, as the schema was known beforehand, the expected query's aliasing makes it more explicit."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting all records from the subscriptions table where the status is 'active'."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT users.name\nFROM users\nJOIN payments ON users.id = payments.user_id",
+    "gpt_eval": "DIFFERENT. The second query is missing the alias \"p\" for the payments table, which makes it syntactically incorrect or less precise, so it does not match the intended semantics of the first query."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT users.name\nFROM users\nJOIN payments ON users.id = payments.user_id",
+    "gpt_eval": "DIFFERENT. The second query is missing the alias \"p\" for the payments table, which makes it syntactically incorrect or less precise, so it does not match the intended semantics of the first query."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year component of paid_at is 2024, which may include invalid or unexpected date formats and does not restrict the date range precisely, making it less accurate and potentially different in result."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, making it less accurate and not fully equivalent."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, making it less accurate and potentially different in result."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming. Since it is more detailed but correct, it still returns the same result set."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same set of user names with the same join conditions and filtering, despite selecting all user columns instead of just the name. Since selecting additional columns does not change the result set, the queries are effectively the same."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, to December 31, 2024. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the \"name\" and \"price\" columns from the \"plans\" table."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year 2024, including only those with paid_at dates from 2024-01-01 to 2024-12-31, while the second query selects payments where the year extracted from paid_at is 2024, which may include invalid dates or different formats but generally aims for the same range; however, the second is more abstract and could potentially include edge cases not covered precisely by the first."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming, making it more detailed but still correct."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The second query filters the payments to only those with status 'completed', so it may return a different sum than the first, which sums all payments regardless of status."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year component of paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the \"name\" and \"price\" columns from the \"plans\" table."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where status is 'completed', so they do not return the same result unless all payments have status 'completed'."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions, with the only difference being the alias \"subscription_count\" in the generated SQL, which does not affect the result set."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming. Since it is more detailed but correct, it still returns the same result set."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting all records from the subscriptions table where the status is 'active'."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments, with the only difference being that the generated query selects all columns from users (u.*) instead of just the name."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments, with the only difference being that the generated query selects all columns from users (u.*) instead of just the name. Since the core filtering condition and joins are the same, the result set is effectively the same for the purpose of the query's intent."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users on user_id, but it uses aliases and explicit column naming, making it more detailed without changing the result set."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions, with the second query adding an alias (subscription_count) to the count, which does not affect the result set."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming, making it more detailed without changing the result set."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users on user_id, and just uses different column aliases without altering the result set."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users on user_id, and just uses different column aliases without altering the result set."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH. The generated SQL is more detailed by aliasing the columns as project_name and owner_name, but it retrieves the same data as the expected SQL, which selects p.name and u.name from the join."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The second query filters the payments to only those with status 'completed', so it may return a different sum than the first, which sums all payments regardless of status."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT p.name AS project_name, u.name AS owner_name\nFROM projects p\nJOIN users u ON p.user_id = u.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it simply adds aliases to the selected columns, which does not change the result set, only the column labels."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming, making it more detailed without changing the result set."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT users.name\nFROM users\nJOIN payments ON users.id = payments.user_id",
+    "gpt_eval": "DIFFERENT. The generated SQL uses table aliases (\"users\" and \"payments\") without the \"u\" and \"p\" aliases, which makes it less detailed but still functionally equivalent; however, since the expected SQL explicitly uses aliases, the generated version is less precise and thus considered different."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, making it less accurate and potentially different in result."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting all records from the subscriptions table where the status is 'active'."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming, which makes it more detailed but still correct."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves all columns from users instead of just the name, but since the WHERE clause filters for users with no payments, the result set concerning user identities remains the same."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments, with the only difference being that the generated query selects all columns from users (u.*) instead of just the name. Since the core filtering condition and joins are the same, the result set is effectively the same."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments, with the only difference being that the generated query selects all columns from users (u.*) instead of just the name. Since the core filtering condition and joins are the same, the result set is effectively the same for the purpose of the query's intent."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH. The generated SQL is more detailed by aliasing the columns as project_name and owner_name, but it retrieves the same data as the expected SQL, which selects p.name and u.name from the join."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments. The only difference is that the generated query selects all columns from users (u.*) instead of just the name, but since the schema was known beforehand and the intent was to match the result set, this difference does not affect the result set's semantics."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, making it less accurate and not fully equivalent."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments, with the only difference being that the generated query selects all columns from users (u.*) instead of just the name. Since the core filtering condition and joins are the same, the result sets are effectively the same."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same set of user names with the same join conditions and filtering, despite selecting all columns (u.*) instead of just u.name, which is acceptable since the schema is known and the focus is on the result set."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments. The only difference is that the generated query selects all columns from users (u.*) instead of just the name, but since the schema was known beforehand, this still aligns with the intent of retrieving user names, assuming the user table contains a 'name' column."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments. The only difference is that the generated query selects all columns from users (u.*) instead of just the name, but since the schema was known beforehand and the intent is to match the result set, this difference does not affect the result set's semantics."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming, making it more detailed without changing the result set."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, making it less accurate and potentially different in result."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year component of paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same set of user names with the same join conditions and filtering, despite selecting all user columns instead of just the name. Since selecting additional columns does not change the result set, the queries are effectively the same."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, making it less accurate and not fully equivalent."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting all records from the \"subscriptions\" table where the \"status\" is 'active'."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same set of user names with the same join conditions and filtering, despite selecting all columns (u.*) instead of just u.name, which is acceptable since the schema is known and the focus is on the result set."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result unless all payments have status 'completed'."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting all records from the subscriptions table where the status is 'active'."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments, with the only difference being that the generated query selects all columns from users (u.*) instead of just the name. Since the schema was known beforehand and the core filtering logic is the same, the result sets are effectively the same."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The second query filters the payments to only those with status 'completed', so it may return a different sum than the first, which sums all payments regardless of status."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH. The generated SQL is more detailed by aliasing the columns as project_name and owner_name, but it retrieves the same data as the expected SQL, which selects project and user names from the same join."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The second query filters the payments to only those with status 'completed', so it may return a different sum than the first, which sums all payments regardless of status."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, to December 31, 2024. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "Get payments made in the year 2024",
+    "expected_sql": "SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at < '2025-01-01';",
+    "generated_sql": "SELECT * FROM payments WHERE EXTRACT(YEAR FROM paid_at) = 2024",
+    "gpt_eval": "DIFFERENT. The first query filters payments within the entire year of 2024, including only those with paid_at dates from January 1, 2024, up to but not including January 1, 2025. The second query selects payments where the year extracted from paid_at is 2024, which may include invalid or null dates and does not restrict the date range precisely, so the results are not guaranteed to be identical."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same set of user names with the same join conditions and filtering, despite selecting all columns (u.*) instead of just u.name, which is acceptable since the schema is known and the focus is on the result set."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and logic, returning user_ids from the projects table where the count of projects per user exceeds one. The generated SQL is more detailed but functionally equivalent to the expected SQL."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same set of user names with the same join conditions and filtering, despite selecting all columns (u.*) instead of just u.name, which is acceptable since the schema is known and the focus is on the result set."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH\n\nThe second query is semantically equivalent to the first; it adds an alias \"subscription_count\" to the COUNT(*) result, which does not affect the actual data returned, only the column name."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions, with the only difference being the alias \"subscription_count\" in the generated SQL, which does not affect the result set."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where status is 'completed', so they do not return the same result unless all payments have status 'completed'."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments. The only difference is that the generated query selects all columns from users (u.*) instead of just the name, but since the schema was known beforehand and the intent is to match the result set, this difference does not affect the result set's semantics."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming, making it more detailed without changing the result set."
+  },
+  {
+    "question": "Show the names of all users who made a payment",
+    "expected_sql": "SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;",
+    "generated_sql": "SELECT DISTINCT u.name\nFROM users u\nJOIN payments p ON u.id = p.user_id",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting distinct user names from the users table joined with payments on user ID, so they are semantically equivalent."
+  },
+  {
+    "question": "Which users have more than one project?",
+    "expected_sql": "SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;",
+    "generated_sql": "SELECT user_id\nFROM projects\nGROUP BY user_id\nHAVING COUNT(*) > 1",
+    "gpt_eval": "MATCH\n\nBoth queries are identical in syntax and semantics, returning user_ids from the projects table where the count of projects per user exceeds one."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments, with the only difference being that the generated query selects all columns from users (u.*) instead of just the name. Since the core filtering condition and joins are the same, the result set is effectively the same for the purpose of identifying users without payments."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; both return users who have subscriptions but no associated payments, with the only difference being that the generated query selects all columns from users (u.*) instead of just the name. Since the core filtering condition and joins are the same, the result set is effectively the same."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The second query filters the payments to only those with status 'completed', so it may return a different sum than the first, which sums all payments regardless of status."
+  },
+  {
+    "question": "Calculate total revenue collected",
+    "expected_sql": "SELECT SUM(amount) FROM payments;",
+    "generated_sql": "SELECT SUM(amount) AS total_revenue FROM payments WHERE status = 'completed'",
+    "gpt_eval": "DIFFERENT. The first query sums all amounts in the payments table, while the second only sums amounts where the status is 'completed', so they do not return the same result assuming there are payments with other statuses."
+  },
+  {
+    "question": "Find users with subscriptions but no payments",
+    "expected_sql": "SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;",
+    "generated_sql": "SELECT u.* FROM users u\nJOIN subscriptions s ON u.id = s.user_id\nLEFT JOIN payments p ON u.id = p.user_id\nWHERE p.id IS NULL",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves all columns from users instead of just the name, but since the WHERE clause filters for users with no payments, the result set's user identifiers and filtering criteria remain the same."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions, with the second query adding an alias (subscription_count) to the count, which does not affect the result set."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the \"name\" and \"price\" columns from the \"plans\" table."
+  },
+  {
+    "question": "Display all active subscriptions",
+    "expected_sql": "SELECT * FROM subscriptions WHERE status = 'active';",
+    "generated_sql": "SELECT * FROM subscriptions WHERE status = 'active'",
+    "gpt_eval": "MATCH\n\nBoth queries are identical, selecting all columns from the \"subscriptions\" table where the \"status\" is 'active'. The generated SQL is more detailed in formatting but functionally equivalent."
+  },
+  {
+    "question": "Show number of subscriptions per plan",
+    "expected_sql": "SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;",
+    "generated_sql": "SELECT plan_id, COUNT(*) AS subscription_count\nFROM subscriptions\nGROUP BY plan_id",
+    "gpt_eval": "MATCH. Both queries group by plan_id and count the number of subscriptions per plan; the only difference is that the generated SQL assigns an alias (subscription_count) to the COUNT(*) result, which does not affect the actual result set."
+  },
+  {
+    "question": "How many users are registered?",
+    "expected_sql": "SELECT COUNT(*) FROM users;",
+    "generated_sql": "SELECT COUNT(*) FROM users",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result, counting all rows in the \"users\" table."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "List all plan names with their prices",
+    "expected_sql": "SELECT name, price FROM plans;",
+    "generated_sql": "SELECT name, price FROM plans",
+    "gpt_eval": "MATCH\n\nBoth queries are identical and will return the same result set, selecting the name and price columns from the plans table."
+  },
+  {
+    "question": "List project names along with their owners' names",
+    "expected_sql": "SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id = u.id;",
+    "generated_sql": "SELECT projects.name AS project_name, users.name AS owner_name\nFROM projects\nJOIN users ON projects.user_id = users.id",
+    "gpt_eval": "MATCH\n\nThe generated SQL is semantically equivalent to the expected SQL; it retrieves the same data by joining projects and users, but it uses aliases and explicit column naming, making it more detailed without changing the result set."
+  }
+]

@@ -1,44 +1,78 @@
-import os, textwrap
-from openai import AsyncOpenAI
+import os, httpx, backoff
+import re
+from .validator import validate_sql
+from .gpt4_fallback import gpt4_to_sql
 
-client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+HF_URL = os.getenv("HF_ENDPOINT_URL")
+HF_TOKEN = os.getenv("HF_ACCESS_TOKEN")
+GPT4_DEV_MODE = os.getenv("GPT4_DEV") == "1"
 
-_SYSTEM = """
-You are an API that strictly outputs one and only one valid, complete SQL query for each input.
-- The query must be valid PostgreSQL syntax.
-- Never output multiple SQL queries.
-- Never output explanations, comments, or anything else besides the SQL.
-- Never merge multiple queries together.
-- Always focus on the most relevant interpretation of the user’s question.
-- If the user’s request could generate multiple queries, choose only the most appropriate one.
-- Always ensure the output is a single standalone SQL query.
-- Never write mutating statements (INSERT/UPDATE/DELETE), temp tables, or CTEs.
-"""
+async def _sqlcoder(prompt: str) -> str:
+    async with httpx.AsyncClient(timeout=120) as c:
+        r = await c.post(
+            HF_URL,
+            headers={
+                "Accept": "application/json",
+                "Authorization": f"Bearer {HF_TOKEN}",
+                "Content-Type": "application/json",
+            },
+            json={"inputs": prompt, "parameters": {}},
+        )
+    try:
+        r.raise_for_status()
+    except Exception:
+        print("📥 HF response content (error):")
+        print(r.text)
+        raise
 
-def _tables_schema() -> str:
-    return textwrap.dedent(
-        """
-        plans(id, name, price, created_at)
-        users(id, email, name, password_hash, created_at)
-        projects(id, user_id, name, description, created_at)
-        subscriptions(id, user_id, plan_id, status, started_at, ended_at)
-        payments(id, user_id, amount, status, paid_at)
-        """
-    )
+    # Raw response from HF
+    raw_output = r.json()[0]["generated_text"]
+    print("📤 SQLCoder raw output:")
+    print(raw_output)
 
+    # Extract SQL only from [SQL] ... marker
+    match = re.search(r"\[SQL\](.*)", raw_output, re.DOTALL)
+    if not match:
+        raise ValueError("❌ Could not extract SQL from SQLCoder output")
 
-async def to_sql(question: str) -> str:
-    chat = [
-        {"role": "system", "content": _SYSTEM},
-        {
-            "role": "user",
-            "content": f"Schema:\n{_tables_schema()}\n\nQuestion: {question}",
-        },
-    ]
-    resp = await client.chat.completions.create(
-        model="gpt-4.1-nano",
-        messages=chat,
-        max_tokens=128,
-        temperature=0,
-    )
-    return resp.choices[0].message.content.strip("` ").split(";")[0]
+    return match.group(1).strip()
+
+@backoff.on_exception(backoff.expo, httpx.HTTPError, max_time=30)
+async def to_sql(question: str, schema: str) -> tuple[str, str]:
+    prompt = f"""### Task
+    Generate a SQL query to answer [QUESTION]{question}[/QUESTION]
+
+    ### Database Schema
+    The query will run on a database with the following schema:
+    {schema}
+
+    ### Answer
+    Given the database schema, here is the SQL query that [QUESTION]{question}[/QUESTION]
+    [SQL]
+    """
+
+    try:
+        if GPT4_DEV_MODE:
+            # Dev: Try GPT-4 first, fallback to HF if it fails
+            raw = await gpt4_to_sql(question, schema)
+            print("GPT4 used")
+            return validate_sql(raw), "gpt4"
+        else:
+            # Prod: Try HF first, fallback to GPT-4   
+            raw = await _sqlcoder(prompt)
+            print("hs_sqlcoder used")
+            return validate_sql(raw), "sqlcoder"
+    except Exception as e:
+        print(f"⚠️ Primary model failed: {e}")
+        try:
+            if GPT4_DEV_MODE:
+                raw = await _sqlcoder(prompt)
+                print("hs_sqlcoder used")
+                return validate_sql(raw), "sqlcoder"
+            else:
+                raw = await gpt4_to_sql(question, schema)
+                print("GPT4 used")
+                return validate_sql(raw), "gpt4"
+        except Exception as final:
+            print("❌ Both models failed.")
+            raise final

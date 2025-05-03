@@ -1,5 +1,5 @@
 import pytest, asyncio
-from services.nl2sql import to_sql
+from apps.api.services.gpt4_fallback import to_sql
 from services.validator import validate_sql
 
 # 30-question golden set

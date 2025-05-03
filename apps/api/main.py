@@ -1,6 +1,7 @@
 import asyncpg
-from services.nl2sql import to_sql
+from apps.api.services.nl2sql import to_sql
 from services.validator import validate_sql
+from services.validator import _tables_schema
 from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -20,6 +21,9 @@ from services.viz import df_to_png, cache_key
 #from services.cache import get_png, set_png
 import pandas as pd, duckdb
 
+import posthog
+posthog.project_api_key = os.getenv("POSTHOG_API_KEY")
+posthog.host = os.getenv("POSTHOG_HOST")
 
 app = FastAPI()
 
@@ -90,9 +94,12 @@ def health_check():
 #    return {"answer": f"👋 Hi <@{uid}>! You asked: \"{payload.question}\""}
 @app.post("/ask")
 async def ask(payload: AskPayload, uid: str = Depends(clerk_guard)):
-    # 1) NL → SQL
-    raw_sql = await to_sql(payload.question)
+    start = time.perf_counter()
 
+
+    # 1) NL → SQL
+    raw_sql, source = await to_sql(payload.question, _tables_schema())
+    
     # 2) Validate / sanitize
     try:
         sql = validate_sql(raw_sql)
@@ -116,7 +123,12 @@ async def ask(payload: AskPayload, uid: str = Depends(clerk_guard)):
             " | ".join(str(row[c]) for c in cols) for row in rows[:20]
         )
         answer = f"```{preview}```"
-
+    # … your existing logic …
+    lat_ms = (time.perf_counter() - start) * 1000
+    posthog.capture(uid, "query_executed",
+                {"lat_ms": lat_ms, 
+                 "cached": False,
+                 "source": source})
     return {"answer": answer}
 
 
@@ -126,7 +138,8 @@ async def chart(payload: AskPayload, uid: str = Depends(clerk_guard)):
     t0 = time.perf_counter()
     print("⚡ Step 1: received", time.perf_counter() - t0)
 
-    sql = validate_sql(await to_sql(payload.question))
+    raw_sql, source = await to_sql(payload.question, _tables_schema())
+    sql = validate_sql(raw_sql)
     print("⚡ Step 2: to_sql done", time.perf_counter() - t0)
 
     conn = await asyncpg.connect(get_database_url())
@@ -145,5 +158,10 @@ async def chart(payload: AskPayload, uid: str = Depends(clerk_guard)):
     # Offload the blocking PNG generation into a threadpool:
     png = await run_in_threadpool(df_to_png, df)
     print("⚡ Step 6: PNG generated", time.perf_counter() - t0)
-
+    lat_ms = (time.perf_counter() - t0) * 1000
+    posthog.capture(uid, "query_executed",
+                {"lat_ms": lat_ms, 
+                 "cached": False,
+                "source": source  # ← hf or gpt4
+                })
     return Response(content=png, media_type="image/png")

@@ -13,7 +13,7 @@ returns the (trimmed) SQL string on success.
 import sqlglot
 from guardrails import Guard
 from pydantic import BaseModel
-
+import textwrap
 # ── allow-list & schema whitelist ────────────────────────────────────────────
 ALLOWED_STATEMENTS = {"SELECT"}
 
@@ -24,6 +24,17 @@ KNOWN_TABLES = {
     "subscriptions",
     "payments",
 }
+def _tables_schema() -> str:
+    return textwrap.dedent(
+        """
+        plans(id, name, price, created_at)
+        users(id, email, name, password_hash, created_at)
+        projects(id, user_id, name, description, created_at)
+        subscriptions(id, user_id, plan_id, status, started_at, ended_at)
+        payments(id, user_id, amount, status, paid_at)
+        """
+    )
+
 
 
 # ── tiny Pydantic model so Guardrails can re-ask / coerce consistently ──────

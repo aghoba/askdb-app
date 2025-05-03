@@ -1,0 +1,458 @@
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered?
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project?
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 1)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 2)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 3)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 4)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 5)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 6)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 7)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 8)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 9)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 10)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 11)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 12)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 13)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 14)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 15)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 16)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 17)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 18)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 19)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 20)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 21)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 22)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 23)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 24)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 25)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 26)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 27)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 28)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 29)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 30)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 31)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 32)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 33)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 34)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 35)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 36)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 37)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 38)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 39)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 40)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 41)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 42)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 43)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 44)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 45)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 46)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 47)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 48)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 49)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 50)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 51)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 52)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 53)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 54)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 55)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 56)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 57)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 58)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 59)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 60)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 61)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 62)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 63)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 64)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 65)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 66)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 67)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 68)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 69)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 70)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 71)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 72)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 73)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 74)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 75)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 76)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 77)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 78)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 79)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 80)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 81)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 82)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 83)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 84)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 85)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 86)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 87)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 88)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 89)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 90)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 91)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 92)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 93)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 94)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 95)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 96)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 97)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 98)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 99)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 100)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 101)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 102)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 103)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 104)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 105)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 106)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 107)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 108)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 109)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 110)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 111)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 112)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 113)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 114)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 115)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 116)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 117)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 118)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 119)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 120)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 121)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 122)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 123)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 124)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 125)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 126)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 127)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 128)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 129)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 130)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 131)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 132)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 133)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 134)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 135)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 136)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 137)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 138)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 139)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 140)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 141)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 142)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 143)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 144)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 145)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 146)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 147)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 148)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 149)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 150)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 151)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 152)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 153)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 154)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 155)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 156)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 157)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 158)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 159)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 160)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 161)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 162)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 163)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 164)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 165)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 166)
+- expected_sql: SELECT u.name FROM users u JOIN subscriptions s ON u.id = s.user_id
+    LEFT JOIN payments p ON u.id = p.user_id WHERE p.id IS NULL;
+  question: Find users with subscriptions but no payments (variation 167)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 168)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 169)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 170)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 171)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 172)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 173)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 174)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 175)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 176)
+- expected_sql: SELECT SUM(amount) FROM payments;
+  question: Calculate total revenue collected (variation 177)
+- expected_sql: SELECT name, price FROM plans;
+  question: List all plan names with their prices (variation 178)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 179)
+- expected_sql: SELECT p.name, u.name FROM projects p JOIN users u ON p.user_id =
+    u.id;
+  question: List project names along with their owners' names (variation 180)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 181)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 182)
+- expected_sql: SELECT * FROM payments WHERE paid_at >= '2024-01-01' AND paid_at <
+    '2025-01-01';
+  question: Get payments made in the year 2024 (variation 183)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 184)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 185)
+- expected_sql: SELECT COUNT(*) FROM users;
+  question: How many users are registered? (variation 186)
+- expected_sql: SELECT DISTINCT u.name FROM users u JOIN payments p ON u.id = p.user_id;
+  question: Show the names of all users who made a payment (variation 187)
+- expected_sql: SELECT user_id FROM projects GROUP BY user_id HAVING COUNT(*) > 1;
+  question: Which users have more than one project? (variation 188)
+- expected_sql: SELECT plan_id, COUNT(*) FROM subscriptions GROUP BY plan_id;
+  question: Show number of subscriptions per plan (variation 189)
+- expected_sql: SELECT * FROM subscriptions WHERE status = 'active';
+  question: Display all active subscriptions (variation 190)

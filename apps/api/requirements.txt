@@ -32,3 +32,8 @@ pytest
 pytest-sugar
 pytest-snapshot
 pytest-asyncio
+
+# Accuracy sprint
+tiktoken
+posthog>=4.0
+backoff
