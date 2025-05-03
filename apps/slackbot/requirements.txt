@@ -1,0 +1,19 @@
+# Core framework
+fastapi
+uvicorn[standard]
+
+# Slack SDK with async support
+slack_bolt[async]
+
+# HTTP client (FastAPI-compatible)
+httpx
+aiohttp  # required by slack_bolt[async]
+
+# Environment variable management
+python-dotenv
+
+# Auth / security
+python-jose
+
+# Async Redis
+redis>=4.5.0

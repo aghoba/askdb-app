@@ -1,0 +1,3 @@
+SELECT user_id, COUNT(*) AS project_count
+FROM projects
+GROUP BY user_id;

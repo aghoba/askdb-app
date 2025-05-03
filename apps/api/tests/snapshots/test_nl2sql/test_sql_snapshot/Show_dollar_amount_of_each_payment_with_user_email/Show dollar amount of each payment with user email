@@ -1,0 +1,1 @@
+SELECT payments.amount, users.email FROM payments JOIN users ON payments.user_id = users.id;

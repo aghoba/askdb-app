@@ -1,0 +1,4 @@
+SELECT users.id, users.email, users.name, plans.name AS plan_name
+FROM users
+JOIN subscriptions ON users.id = subscriptions.user_id
+JOIN plans ON subscriptions.plan_id = plans.id;

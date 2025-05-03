@@ -1,0 +1,5 @@
+SELECT p.name AS plan_name, AVG(payments.amount) AS average_payment_amount
+FROM plans p
+JOIN subscriptions s ON p.id = s.plan_id
+JOIN payments ON s.user_id = payments.user_id
+GROUP BY p.name;

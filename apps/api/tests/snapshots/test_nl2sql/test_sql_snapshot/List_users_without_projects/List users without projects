@@ -1,0 +1,1 @@
+SELECT u.* FROM users u LEFT JOIN projects p ON u.id = p.user_id WHERE p.id IS NULL;

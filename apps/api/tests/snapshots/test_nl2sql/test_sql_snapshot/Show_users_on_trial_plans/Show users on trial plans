@@ -1,0 +1,5 @@
+SELECT u.* 
+FROM users u
+JOIN subscriptions s ON u.id = s.user_id
+JOIN plans p ON s.plan_id = p.id
+WHERE s.status = 'trial';

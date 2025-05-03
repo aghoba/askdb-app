@@ -1,0 +1,1 @@
+SELECT * FROM plans ORDER BY price DESC;

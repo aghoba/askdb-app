@@ -1,0 +1,3 @@
+SELECT u.* FROM users u
+JOIN subscriptions s ON u.id = s.user_id
+WHERE s.status = 'active';

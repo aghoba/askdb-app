@@ -1,0 +1,5 @@
+SELECT users.id, users.email, users.name
+FROM users
+JOIN projects ON users.id = projects.user_id
+GROUP BY users.id, users.email, users.name
+HAVING COUNT(projects.id) > 1;

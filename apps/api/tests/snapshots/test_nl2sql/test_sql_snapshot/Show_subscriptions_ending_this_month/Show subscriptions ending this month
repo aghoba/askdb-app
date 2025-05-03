@@ -1,0 +1,1 @@
+SELECT * FROM subscriptions WHERE ended_at >= date_trunc('month', current_date) AND ended_at < date_trunc('month', current_date) + interval '1 month';

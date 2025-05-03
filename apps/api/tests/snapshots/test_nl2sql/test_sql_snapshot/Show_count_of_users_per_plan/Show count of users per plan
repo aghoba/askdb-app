@@ -1,0 +1,4 @@
+SELECT p.name AS plan_name, COUNT(DISTINCT s.user_id) AS user_count
+FROM plans p
+LEFT JOIN subscriptions s ON p.id = s.plan_id
+GROUP BY p.name;

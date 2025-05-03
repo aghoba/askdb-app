@@ -1,0 +1,34 @@
+# Core backend
+fastapi
+uvicorn[standard]
+
+# PostgreSQL & async support
+asyncpg>=0.29
+psycopg[binary]  # optional: remove if you're using asyncpg exclusively
+
+# Validation and security
+python-jose
+pydantic
+
+# Redis (async)
+redis>=4.5.0
+
+# SQL + LLM logic
+sqlglot>=23.2
+guardrails-ai>=0.4.0
+openai>=1.14.0
+
+# Data analysis and visualization
+pandas
+duckdb
+plotly
+kaleido
+
+# Typing and system
+typing-extensions; python_version < "3.10"
+
+# Dev / Testing
+pytest
+pytest-sugar
+pytest-snapshot
+pytest-asyncio
