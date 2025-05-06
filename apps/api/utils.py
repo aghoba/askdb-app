@@ -1,21 +1,18 @@
 import os
-
+import asyncpg
+from cryptography.fernet import Fernet
 from urllib.parse import urlparse, urlunparse
 
-def get_database_url():
-    return os.getenv("DATABASE_URL")
-    raw_url = os.getenv("DATABASE_URL")
-    if not raw_url:
-        raise ValueError("DATABASE_URL is not set in environment variables.")
 
-    try:
-        with open("/proc/1/cgroup", "rt") as f:
-            in_docker = "docker" in f.read()
-    except Exception:
-        in_docker = False
+# 1) Control-plane pool (superuser to control-plane DB)
+_control_pool: asyncpg.Pool | None = None
+async def get_control_pool() -> asyncpg.Pool:
+    global _control_pool
+    if not _control_pool:
+        _control_pool = await asyncpg.create_pool(os.getenv("DATABASE_URL"))
+    return _control_pool
 
-    parsed = urlparse(raw_url)
-    hostname = "db" if in_docker else "localhost"
-    fixed = parsed._replace(netloc=f"{parsed.username}:{parsed.password}@{hostname}:{parsed.port}")
-    return urlunparse(fixed)
-
+# 2) Decrypt a DSN
+_cipher = Fernet(os.getenv("FERNET_KEY"))  # generate one and store in .env
+def decrypt_dsn(enc: str) -> str:
+    return _cipher.decrypt(enc.encode()).decode()

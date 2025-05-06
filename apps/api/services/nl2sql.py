@@ -56,23 +56,23 @@ async def to_sql(question: str, schema: str) -> tuple[str, str]:
             # Dev: Try GPT-4 first, fallback to HF if it fails
             raw = await gpt4_to_sql(question, schema)
             print("GPT4 used")
-            return validate_sql(raw), "gpt4"
+            return raw, "gpt4"
         else:
             # Prod: Try HF first, fallback to GPT-4   
             raw = await _sqlcoder(prompt)
             print("hs_sqlcoder used")
-            return validate_sql(raw), "sqlcoder"
+            return raw, "sqlcoder"
     except Exception as e:
         print(f"⚠️ Primary model failed: {e}")
         try:
             if GPT4_DEV_MODE:
                 raw = await _sqlcoder(prompt)
                 print("hs_sqlcoder used")
-                return validate_sql(raw), "sqlcoder"
+                return raw, "sqlcoder"
             else:
                 raw = await gpt4_to_sql(question, schema)
                 print("GPT4 used")
-                return validate_sql(raw), "gpt4"
+                return raw, "gpt4"
         except Exception as final:
             print("❌ Both models failed.")
             raise final

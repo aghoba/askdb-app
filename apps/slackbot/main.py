@@ -28,11 +28,12 @@ async def custom_error_handler(error, body, logger):
     logger.exception("Uncaught exception in Slack handler")
     logger.error("Request body: %r", body)
 
-askdb_api_url = os.getenv("ASKDB_API_URL", "http://api:8000/ask")
-
+askdb_api_url = os.getenv("ASKDB_API_URL", "http://127.0.0.1:8001/ask")
+askdb_chart_api_url = os.getenv("ASKDB_CHART_API_URL", "http://127.0.0.1:8001/chart")
 @slack_app.command("/askdb")
 async def handle_askdb(ack, body, respond):
     await ack()
+    print("🔖 Slack team_id:", body.get("team_id"))
     user_id = body.get("user_id")
     question = body.get("text")
 
@@ -42,11 +43,18 @@ async def handle_askdb(ack, body, respond):
 
     try:
         async with httpx.AsyncClient(timeout=30) as client:
+            # resp = await client.post(
+            #     askdb_api_url,
+            #     json={"user_id": user_id, "question": question},
+            #     headers={"Authorization": body.get("token", "dummy-token")},
+            # )
             resp = await client.post(
-                askdb_api_url,
-                json={"user_id": user_id, "question": question},
-                headers={"Authorization": body.get("token", "dummy-token")},
-            )
+            askdb_api_url,
+            json={"user_id": user_id, "question": question},
+            headers={
+            "Authorization": body.get("token", ""),          # your auth-bypass header if dev
+            "x-slack-team": body["team_id"],                 # ⚡ send the Slack team
+            },)
     except httpx.RequestError as e:
         await respond(f"🚨 Error reaching AskDB API: {e}")
         return
@@ -60,10 +68,8 @@ async def handle_askdb(ack, body, respond):
         try:
             error_detail = resp.json().get("detail", "Unknown error.")
         except Exception:
-            error_detail = "Unknown error."
-
-        await respond(f"⚠️ {error_detail}")
-        return
+            error_detail = resp.text
+        return await respond(f"⚠️ {error_detail}")
 
     try:
         answer = resp.json().get("answer", "🤖 Sorry, no answer available.")
@@ -101,14 +107,27 @@ async def handle_chart(ack, body, respond):
 
     # 2) Hit your /chart endpoint…
     async with httpx.AsyncClient(timeout=CHART_TIMEOUT) as client:
+        # resp = await client.post(
+        #     askdb_chart_api_url,
+        #     json={"user_id": user_id, "question": question},
+        #     headers={"Authorization": body.get("token", "")},
+        # )
         resp = await client.post(
-            os.getenv("ASKDB_CHART_API_URL", "http://127.0.0.1:8001/chart"),
+            askdb_chart_api_url,
             json={"user_id": user_id, "question": question},
-            headers={"Authorization": body.get("token", "")},
-        )
+            headers={
+            "Authorization": body.get("token", ""),          # your auth-bypass header if dev
+            "x-slack-team": body["team_id"],                 # ⚡ send the Slack team
+            },)
+    # if resp.status_code != 200:
+    #     return await respond(f"Chart error: {resp.text}")
     if resp.status_code != 200:
-        return await respond(f"Chart error: {resp.text}")
-
+        try:
+            error_detail = resp.json().get("detail", "Unknown error.")
+        except Exception:
+            error_detail = resp.text
+        return await respond(f"⚠️ {error_detail}")
+        
     # 3) Upload via the v2 API
     fileobj = io.BytesIO(resp.content)
     fileobj.name = "chart.png"
